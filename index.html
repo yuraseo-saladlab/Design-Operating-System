@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>샐러드랩 디자인 운영 가이드</title>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F6F2;
+    --surface: #FFFFFF;
+    --ink: #1C1B18;
+    --ink-2: #5C5A54;
+    --ink-3: #9C9A94;
+    --accent: #E05C2A;
+    --accent-bg: #FDF0EA;
+    --green: #1A6644;
+    --green-bg: #EAF4EE;
+    --blue: #1A3F72;
+    --blue-bg: #EAF0FA;
+    --amber: #8A5800;
+    --amber-bg: #FFF7E6;
+    --rule: #E4E2DC;
+    --radius: 6px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* ─── Layout ─── */
+  .page { max-width: 860px; margin: 0 auto; padding: 60px 40px 120px; }
+
+  /* ─── Header ─── */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 36px;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 56px;
+  }
+
+  .header-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+  }
+
+  h1 span { color: var(--accent); }
+
+  .header-meta {
+    text-align: right;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-3);
+    line-height: 2;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── Sections ─── */
+  section { margin-bottom: 60px; }
+
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1.5px solid var(--rule);
+  }
+
+  h3 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-bottom: 10px;
+    margin-top: 24px;
+  }
+
+  p { color: var(--ink-2); margin-bottom: 12px; line-height: 1.75; }
+
+  /* ─── Philosophy Box ─── */
+  .philosophy {
+    background: var(--ink);
+    padding: 28px 32px;
+    border-radius: var(--radius);
+    margin-bottom: 56px;
+  }
+
+  .philosophy p {
+    color: #C8C6C0;
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.85;
+  }
+
+  .philosophy strong { color: white; }
+
+  /* ─── 2-Col Cards ─── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  /* ─── Session Card ─── */
+  .session-card {
+    display: flex;
+    flex-direction: column;
+    padding: 22px 20px 0 !important;
+    overflow: hidden;
+  }
+
+  .session-split {
+    display: flex;
+    margin: 14px -20px 0;
+    border-top: 1.5px solid var(--rule);
+  }
+
+  .session-half {
+    flex: 1;
+    padding: 14px 16px;
+  }
+
+  .session-divider {
+    width: 1.5px;
+    background: var(--rule);
+    flex-shrink: 0;
+  }
+
+  .session-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+
+  .tag-critique { background: var(--accent-bg); color: var(--accent); }
+  .tag-align { background: var(--green-bg); color: var(--green); }
+  .badge-session { background: var(--ink); color: white; }
+
+  .two-col .card {
+    border: 1.5px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  /* ─── 3-Col Cards (kept for roadmap etc) ─── */
+  .three-col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    background: var(--rule);
+    border: 1.5px solid var(--rule);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .card {
+    background: var(--surface);
+    padding: 22px 20px;
+  }
+
+  .card-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    display: block;
+    width: fit-content;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  .badge-a { background: var(--accent); color: white; }
+  .badge-b { background: var(--green); color: white; }
+  .badge-c { background: var(--blue); color: white; }
+
+  .card-title { font-size: 14px; font-weight: 700; margin-bottom: 2px; color: var(--ink); }
+  .card-freq {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-3);
+    margin-bottom: 10px;
+  }
+  .card-desc { font-size: 12px; color: var(--ink-2); line-height: 1.65; margin: 0; }
+  .card-output {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--rule);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-3);
+  }
+
+  /* ─── Flow ─── */
+  .flow {
+    display: flex;
+    align-items: center;
+    background: var(--surface);
+    border: 1.5px solid var(--rule);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .flow-step {
+    flex: 1;
+    padding: 14px 16px;
+    text-align: center;
+    border-right: 1.5px solid var(--rule);
+  }
+
+  .flow-step:last-child { border-right: none; }
+
+  .flow-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  .flow-text { font-size: 12px; font-weight: 600; color: var(--ink); }
+  .flow-sub { font-size: 11px; color: var(--ink-3); margin-top: 1px; }
+  .flow-arrow { padding: 0 6px; color: var(--rule); font-size: 16px; flex-shrink: 0; }
+
+  /* ─── Schedule ─── */
+  .schedule {
+    background: var(--surface);
+    border: 1.5px solid var(--rule);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .schedule-header {
+    background: var(--ink);
+    color: white;
+    padding: 9px 20px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .schedule-row {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    border-bottom: 1.5px solid var(--rule);
+  }
+
+  .schedule-row:last-child { border-bottom: none; }
+
+  .schedule-when {
+    padding: 13px 18px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-2);
+    border-right: 1.5px solid var(--rule);
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+  }
+
+  .schedule-what {
+    padding: 13px 18px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .sch-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .sch-a { background: var(--accent-bg); color: var(--accent); }
+  .sch-b { background: var(--green-bg); color: var(--green); }
+  .sch-c { background: var(--blue-bg); color: var(--blue); }
+
+  .sch-cancel { color: var(--accent); font-size: 12px; }
+
+  /* ─── Detail Block ─── */
+  .detail-block {
+    background: var(--surface);
+    border: 1.5px solid var(--rule);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-top: 16px;
+  }
+
+  .detail-row {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    border-bottom: 1.5px solid var(--rule);
+    font-size: 13px;
+  }
+
+  .detail-row:last-child { border-bottom: none; }
+
+  .detail-key {
+    padding: 13px 16px;
+    border-right: 1.5px solid var(--rule);
+    background: var(--bg);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-2);
+    display: flex;
+    align-items: center;
+  }
+
+  .detail-val { padding: 13px 18px; color: var(--ink-2); line-height: 1.6; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+
+  /* ─── Do/Don't ─── */
+  .do-dont { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+
+  .do-card, .dont-card {
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    border: 1.5px solid;
+  }
+
+  .do-card { background: var(--green-bg); border-color: #A8D4BA; }
+  .dont-card { background: var(--accent-bg); border-color: #F0BCA8; }
+
+  .card-label-sm {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  .do-card .card-label-sm { color: var(--green); }
+  .dont-card .card-label-sm { color: var(--accent); }
+
+  .do-card ul, .dont-card ul { padding-left: 15px; }
+  .do-card li, .dont-card li { font-size: 12px; color: var(--ink-2); line-height: 1.75; margin-bottom: 4px; }
+
+  /* ─── Lens Grid ─── */
+  .lens-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .lens-item {
+    background: var(--blue-bg);
+    border: 1.5px solid #B0C8E8;
+    border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+
+  .lens-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--blue);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  .lens-desc { font-size: 12px; color: var(--ink-2); line-height: 1.6; margin: 0; }
+
+  /* ─── Audit Table ─── */
+  .audit-table-wrap {
+    border: 1.5px solid var(--rule);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-top: 16px;
+  }
+
+  .audit-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .audit-table thead tr {
+    background: var(--ink);
+    color: white;
+  }
+
+  .audit-table thead th {
+    padding: 10px 12px;
+    text-align: left;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .audit-table thead th:last-child { border-right: none; }
+
+  .audit-table tbody tr { border-bottom: 1.5px solid var(--rule); }
+  .audit-table tbody tr:last-child { border-bottom: none; }
+  .audit-table tbody tr:nth-child(even) { background: var(--bg); }
+  .audit-table tbody tr:nth-child(odd) { background: var(--surface); }
+
+  .audit-table tbody td {
+    padding: 11px 12px;
+    color: var(--ink-2);
+    border-right: 1.5px solid var(--rule);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+
+  .audit-table tbody td:last-child { border-right: none; }
+
+  .tag-high {
+    display: inline-block;
+    background: #FDE8E4;
+    color: var(--accent);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    padding: 2px 7px;
+    border-radius: 2px;
+  }
+
+  .tag-mid {
+    display: inline-block;
+    background: var(--amber-bg);
+    color: var(--amber);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    padding: 2px 7px;
+    border-radius: 2px;
+  }
+
+  .tag-low {
+    display: inline-block;
+    background: var(--green-bg);
+    color: var(--green);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    padding: 2px 7px;
+    border-radius: 2px;
+  }
+
+  .status-done {
+    display: inline-block;
+    background: var(--green-bg);
+    color: var(--green);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+
+  .status-wip {
+    display: inline-block;
+    background: var(--blue-bg);
+    color: var(--blue);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+
+  .status-found {
+    display: inline-block;
+    background: var(--amber-bg);
+    color: var(--amber);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+
+  .empty-row td {
+    color: var(--ink-3);
+    font-style: italic;
+    background: var(--bg) !important;
+    text-align: center;
+    padding: 20px;
+  }
+
+  /* ─── Impact Table ─── */
+  .impact-table-wrap {
+    border: 1.5px solid var(--rule);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-top: 16px;
+  }
+
+  .impact-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .impact-table thead tr { background: var(--ink); color: white; }
+  .impact-table thead th {
+    padding: 10px 14px;
+    text-align: left;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+  .impact-table thead th:last-child { border-right: none; }
+
+  .impact-table tbody tr { border-bottom: 1.5px solid var(--rule); }
+  .impact-table tbody tr:last-child { border-bottom: none; }
+
+  .impact-table tbody td {
+    padding: 12px 14px;
+    color: var(--ink-2);
+    border-right: 1.5px solid var(--rule);
+    vertical-align: top;
+    line-height: 1.65;
+  }
+
+  .impact-table tbody td:last-child { border-right: none; }
+
+  .impact-high { background: #FEF0EE; }
+  .impact-mid { background: var(--amber-bg); }
+  .impact-low { background: var(--green-bg); }
+
+  /* ─── Roadmap ─── */
+  .roadmap {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    background: var(--rule);
+    border: 1.5px solid var(--rule);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-top: 16px;
+  }
+
+  .roadmap-col { background: var(--surface); padding: 22px 18px; }
+
+  .roadmap-month {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .roadmap-focus { font-size: 13px; font-weight: 700; margin-bottom: 10px; line-height: 1.4; }
+  .roadmap-sub { font-size: 11px; font-weight: 400; color: var(--ink-3); margin-left: 4px; }
+  .roadmap-items { font-size: 11px; color: var(--ink-2); line-height: 1.9; padding-left: 12px; }
+
+  /* ─── Alert Note ─── */
+  .note {
+    background: var(--accent-bg);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    margin-top: 10px;
+  }
+
+  .note p { color: var(--accent); font-size: 12px; margin: 0; }
+  .note strong { color: var(--accent); }
+
+  /* ─── Ops Info Row ─── */
+  .ops-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+
+  .ops-chip {
+    background: var(--surface);
+    border: 1.5px solid var(--rule);
+    border-radius: 4px;
+    padding: 8px 14px;
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+
+  .ops-chip strong {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-3);
+    display: block;
+    margin-bottom: 2px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* ─── Footer ─── */
+  footer {
+    border-top: 1.5px solid var(--rule);
+    padding-top: 24px;
+    margin-top: 80px;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-3);
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── Divider ─── */
+  .divider { border: none; border-top: 1.5px solid var(--rule); margin: 28px 0; }
+
+  @media (max-width: 680px) {
+    .page { padding: 40px 20px 80px; }
+    .header { flex-direction: column; gap: 16px; }
+    .header-meta { text-align: left; }
+    .two-col, .three-col, .roadmap { grid-template-columns: 1fr; }
+    .do-dont, .lens-grid { grid-template-columns: 1fr; }
+    .schedule-row { grid-template-columns: 1fr; }
+    .schedule-when { border-right: none; border-bottom: 1.5px solid var(--rule); }
+    .detail-row { grid-template-columns: 1fr; }
+    .detail-key { border-right: none; border-bottom: 1.5px solid var(--rule); }
+    .flow { flex-direction: column; }
+    .flow-step { border-right: none; border-bottom: 1.5px solid var(--rule); }
+    .flow-arrow { display: none; }
+    .audit-table { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <div class="header-eyebrow">샐러드랩 · AlphaApps Design</div>
+      <h1>디자인 품질 관리<br><span>운영 가이드</span></h1>
+    </div>
+    <div class="header-meta">
+      <div>v2.0</div>
+      <div>2026. 04. 22</div>
+      <div>디자인 리드</div>
+    </div>
+  </div>
+
+  <!-- Philosophy -->
+  <div class="philosophy">
+    <p>디자인 리뷰는 <strong>심판받는 자리가 아니다.</strong><br>
+    막힌 지점을 함께 뚫고, 팀의 집단 지성으로 퀄리티를 끌어올리는 자리다.<br>
+    단발 피드백이 아닌 <strong>발견 → 패턴 → 원칙화</strong>의 사이클이 돌아야 같은 문제가 반복되지 않는다.</p>
+
+  </div>
+
+  <!-- 01 운영 체계 -->
+  <section>
+    <div class="section-label">01</div>
+    <h2>두 가지로 운영한다</h2>
+
+    <p>품질 관리는 한 번의 리뷰로 완성되지 않는다. 역할이 다른 두 활동이 맞물려 돌아간다.</p>
+
+    <div class="two-col">
+      <!-- 디자인 세션 통합 카드 -->
+      <div class="card session-card">
+        <span class="card-badge badge-session">디자인 세션</span>
+        <div class="card-title">크리틱 · 방향성 얼라인</div>
+        <div class="card-freq">매주 금요일 · 교대 진행</div>
+        <div class="session-split">
+          <div class="session-half">
+            <div class="session-tag tag-critique">크리틱</div>
+            <p class="card-desc" style="margin:0;">하루 전 공유 → 금요일 피드백. 막힌 지점을 함께 푼다.</p>
+            <div class="card-output">→ 액션아이템</div>
+          </div>
+          <div class="session-divider"></div>
+          <div class="session-half">
+            <div class="session-tag tag-align">얼라인</div>
+            <p class="card-desc" style="margin:0;">맞춰야 할 것이 생기면 하루 전 공유 후 세션에서 논의.</p>
+            <div class="card-output">→ 결정 로그</div>
+          </div>
+        </div>
+      </div>
+      <!-- 감사 카드 -->
+      <div class="card">
+        <span class="card-badge badge-c">UIUX 품질 감사</span>
+        <div class="card-title">전체 제품 점검</div>
+        <div class="card-freq">수시 기입 · 자율 일정 1:1 확인</div>
+        <p class="card-desc">누구나 발견 즉시 테이블에 기입. 격주 금요일 1:1로 조율해 스프린트에 반영.</p>
+        <div class="card-output">→ 이슈 로그 · 스프린트 반영</div>
+      </div>
+    </div>
+
+    <p style="margin-bottom: 12px;">두 활동은 이렇게 연결된다.</p>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-label" style="color: var(--blue);">감사 테이블</div>
+        <div class="flow-text">문제 발견</div>
+        <div class="flow-sub">누구나 수시 기입</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-label" style="color: var(--accent);">크리틱</div>
+        <div class="flow-text">개선안 피드백</div>
+        <div class="flow-sub">격주 금요일</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-label" style="color: var(--green);">얼라인</div>
+        <div class="flow-text">원칙으로 정리</div>
+        <div class="flow-sub">격주 금요일</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-label" style="color: var(--ink-3);">결과</div>
+        <div class="flow-text" style="font-weight:400; font-size:12px; color:var(--ink-3);">같은 문제 반복 없음</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 캘린더 -->
+  <section>
+    <div class="section-label">02</div>
+    <h2>캘린더 고정</h2>
+
+    <div class="schedule">
+      <div class="schedule-header">RECURRING SCHEDULE</div>
+      <div class="schedule-row">
+        <div class="schedule-when">매주 금요일</div>
+        <div class="schedule-what">
+          <span class="sch-badge sch-a">디자인 크리틱</span>
+          <span style="color:var(--ink-3); font-size:12px;">또는</span>
+          <span class="sch-badge sch-b">방향성 얼라인</span>
+          <span style="color:var(--ink-3); font-size:12px;">교대 진행</span>
+        </div>
+      </div>
+      <div class="schedule-row">
+        <div class="schedule-when">자율 일정</div>
+        <div class="schedule-what">
+          <span class="sch-badge sch-c">UIUX 감사 1:1</span>
+          <span style="color:var(--ink-3); font-size:12px;">디자인 리드가 필요 시 직접 일정 조율</span>
+        </div>
+      </div>
+      <div class="schedule-row">
+        <div class="schedule-when">매월 말 금요일</div>
+        <div class="schedule-what">
+          <span style="color:var(--ink-2); font-size:13px;">성과 및 진행 현황 공유</span>
+          <span style="color:var(--ink-3); font-size:12px;">전체 공유 · 월 1회</span>
+        </div>
+      </div>
+      <div class="schedule-row">
+        <div class="schedule-when">아젠다 없을 때</div>
+        <div class="schedule-what">
+          <span class="sch-cancel">미팅 취소 — 아젠다 없이 모이면 품질이 떨어진다</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 디자인 크리틱 -->
+  <section>
+    <div class="section-label">03</div>
+    <h2>디자인 크리틱</h2>
+
+    <p>진행 중인 작업에 팀 피드백을 받는다. 발표자가 맥락을 먼저 공유하고, 참여자는 질문 → 관찰 → 제안 순으로 이야기한다.</p>
+
+    <h3>운영 방식</h3>
+    <div class="detail-block">
+      <div class="detail-row">
+        <div class="detail-key">세션 전날</div>
+        <div class="detail-val">고민 중인 작업을 미리 공유한다. 공유 없이는 크리틱 진행 불가.</div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-key">공유 내용</div>
+        <div class="detail-val">① 무엇을 만들고 있나 &nbsp;② 누구를 위한 것인가 &nbsp;③ 오늘 뭘 얻고 싶은가 &nbsp;④ 이미 고민한 것</div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-key">세션 당일</div>
+        <div class="detail-val">컨텍스트 5분 → 발표 10분 → 피드백 15분. 안건 없으면 취소.</div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-key">세션 후</div>
+        <div class="detail-val">결정사항과 액션아이템을 반드시 기록한다.</div>
+      </div>
+    </div>
+
+    <h3>피드백 원칙</h3>
+    <div class="do-dont">
+      <div class="do-card">
+        <div class="card-label-sm">✓ 이렇게</div>
+        <ul>
+          <li>질문 형태로 시작한다<br><em style="font-size:11px; color:var(--ink-3);">"이 플로우에서 사용자가 X 상황이면?"</em></li>
+          <li>관찰 → 영향 → 제안 순으로</li>
+          <li>사용자 목표나 비즈니스 임팩트를 근거로</li>
+          <li>초기 탐색 단계엔 방향성 피드백만</li>
+          <li>반영 안 할 피드백은 이유 공유</li>
+        </ul>
+      </div>
+      <div class="dont-card">
+        <div class="card-label-sm">✗ 이러지 말 것</div>
+        <ul>
+          <li>"이거 별로야" — 근거 없는 평가</li>
+          <li>"우리가 늘 해온 방식" — 가장 위험한 말</li>
+          <li>개인 취향을 팀 기준처럼 말하기</li>
+          <li>초기 탐색 단계에 세부 지적하기</li>
+          <li>피드백 후 팔로업 없이 끝내기</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 방향성 얼라인 -->
+  <section>
+    <div class="section-label">04</div>
+    <h2>방향성 얼라인</h2>
+
+    <p>스쿼드 간 정렬이 필요한 경우 디자인 세션에서 논의한다. 알파푸시·알파업셀·알파리뷰의 UX가 각각 따로 움직이지 않도록 전체 관점에서 대화하는 자리다.</p>
+
+    <h3>운영 방식</h3>
+    <div class="detail-block">
+      <div class="detail-row">
+        <div class="detail-key">세션 전날</div>
+        <div class="detail-val">얼라인이 필요하다고 생각되는 것을 미리 공유한다.</div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-key">주요 논의 주제</div>
+        <div class="detail-val">컴포넌트·패턴 일관성 / 제품 간 고객 여정 연결 / 용어·카피 통일 / 반복 이슈 원칙화</div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-key">세션 후</div>
+        <div class="detail-val">결정된 내용은 반드시 결정 로그에 남긴다. "왜 이렇게 결정했는가"의 근거가 팀 히스토리가 된다.</div>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:14px;">
+      <p>💡 <strong>샐러드랩 핵심 과제</strong> — 알파푸시·업셀·리뷰의 중복 UI 통합, 맥락이 끊긴 기능 연결, 사용자가 이해하기 어려운 용어 개선이 이 세션에서 다뤄져야 한다.</p>
+    </div>
+  </section>
+
+  <!-- 05 UIUX 품질 감사 -->
+  <section>
+    <div class="section-label">05</div>
+    <h2>UIUX 품질 감사</h2>
+
+    <p>생각날 때마다 바로 기록한다. 감사 때만이 아니라 일하다 발견한 것도 즉시 테이블에 기입한다. 디자인 리드가 필요하다고 판단될 때 스쿼드 담당자와 1:1로 확인하고 스프린트에 반영한다.</p>
+
+    <h3>운영 역할</h3>
+    <div class="ops-row">
+      <div class="ops-chip"><strong>작성자</strong>누구나</div>
+      <div class="ops-chip"><strong>확인 일정</strong>자율 일정 1:1</div>
+      <div class="ops-chip"><strong>승인 · 검토</strong>디자인 리드</div>
+      <div class="ops-chip"><strong>작업자</strong>스쿼드 담당자</div>
+      <div class="ops-chip"><strong>반영</strong>스쿼드 스프린트</div>
+    </div>
+
+    <h3>4가지 렌즈로 본다</h3>
+    <div class="lens-grid">
+      <div class="lens-item">
+        <div class="lens-title">일관성</div>
+        <p class="lens-desc">같은 기능인데 UI가 다르게 구현된 곳. 같은 개념인데 다른 단어를 쓰는 곳.</p>
+      </div>
+      <div class="lens-item">
+        <div class="lens-title">맥락 연결</div>
+        <p class="lens-desc">함께 써야 하는 기능인데 동선이 끊기는 곳. 맥락이 같은데 따로 떨어진 기능.</p>
+      </div>
+      <div class="lens-item">
+        <div class="lens-title">엣지케이스</div>
+        <p class="lens-desc">빈 상태, 에러 상태, 로딩 상태가 빠진 화면.</p>
+      </div>
+      <div class="lens-item">
+        <div class="lens-title">카피 · 용어</div>
+        <p class="lens-desc">의미를 알 수 없는 어려운 용어. 동일 기능에 다른 단어 혼용.</p>
+      </div>
+    </div>
+
+    <h3>UIUX 품질 감사 테이블</h3>
+    <p>영향도 기준 — <strong>High</strong>: 전체 플로우에 영향 / <strong>Mid</strong>: 특정 화면·기능에 영향 / <strong>Low</strong>: 카피·색상 등 소규모</p>
+
+    <div class="audit-table-wrap">
+      <table class="audit-table">
+        <thead>
+          <tr>
+            <th style="width:68px;">발견일</th>
+            <th style="width:76px;">제품</th>
+            <th style="width:62px;">렌즈</th>
+            <th>문제 · 화면</th>
+            <th style="width:110px;">유저 영향</th>
+            <th style="width:110px;">비즈니스 임팩트</th>
+            <th style="width:50px;">영향도</th>
+            <th style="width:76px;">담당 스쿼드</th>
+            <th style="width:64px;">스프린트</th>
+            <th style="width:66px;">상태</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>04.10</td>
+            <td>알파리뷰</td>
+            <td>맥락 연결</td>
+            <td>리뷰 작성·통계가 다른 메뉴에 분리됨</td>
+            <td>리뷰 현황 파악에 불필요한 이동 발생</td>
+            <td>리뷰 활용률 저하 → 재구매 전환 기회 손실</td>
+            <td><span class="tag-high">High</span></td>
+            <td>리뷰팀</td>
+            <td>25-09</td>
+            <td><span class="status-wip">논의중</span></td>
+          </tr>
+          <tr>
+            <td>04.14</td>
+            <td>알파업셀</td>
+            <td>엣지케이스</td>
+            <td>에러 상태 화면 미설계</td>
+            <td>오류 발생 시 사용자 이탈 가능성↑</td>
+            <td>업셀 노출 중단 → 매출 기회 손실</td>
+            <td><span class="tag-mid">Mid</span></td>
+            <td>업셀팀</td>
+            <td>25-10</td>
+            <td><span class="status-found">발견됨</span></td>
+          </tr>
+          <tr>
+            <td>04.18</td>
+            <td>전체</td>
+            <td>카피·용어</td>
+            <td>버튼 레이블 혼용 (저장 / 완료 / 확인)</td>
+            <td>어떤 버튼이 어떤 동작인지 혼란</td>
+            <td>직접 임팩트 낮으나 신뢰도 저하</td>
+            <td><span class="tag-low">Low</span></td>
+            <td>전체</td>
+            <td>25-09</td>
+            <td><span class="status-done">완료</span></td>
+          </tr>
+          <tr>
+            <td>04.20</td>
+            <td>알파푸시</td>
+            <td>일관성</td>
+            <td>필터 컴포넌트 디자인이 타 제품과 상이</td>
+            <td>제품 전환 시 학습 비용 발생</td>
+            <td>통합 운영 시 혼란 가중, 지원 비용↑</td>
+            <td><span class="tag-mid">Mid</span></td>
+            <td>푸시팀</td>
+            <td>미정</td>
+            <td><span class="status-found">발견됨</span></td>
+          </tr>
+          <tr class="empty-row">
+            <td colspan="10">— 새로운 이슈를 발견하면 바로 추가하세요 —</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>영향도에 따라 전달 방식을 다르게 한다</h3>
+    <div class="impact-table-wrap">
+      <table class="impact-table">
+        <thead>
+          <tr>
+            <th style="width:60px;">영향도</th>
+            <th>기준</th>
+            <th>전달 방식</th>
+            <th>예시</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="impact-high">
+            <td><span class="tag-high">High</span></td>
+            <td>전체 플로우 재설계 필요, 비즈니스 임팩트 큼</td>
+            <td>문서화 후 PO와 1:1 먼저 → 스프린트 반영</td>
+            <td>기능 분리 구조 개선, 제품 간 여정 연결</td>
+          </tr>
+          <tr class="impact-mid">
+            <td><span class="tag-mid">Mid</span></td>
+            <td>특정 화면·컴포넌트 불일치, 동선 불편</td>
+            <td>크리틱 세션 안건으로 올리기</td>
+            <td>에러 상태 미설계, 컴포넌트 불일치</td>
+          </tr>
+          <tr class="impact-low">
+            <td><span class="tag-low">Low</span></td>
+            <td>카피 오타, 색상 미스, 레이블 혼용</td>
+            <td>Figma 코멘트로 바로 전달</td>
+            <td>버튼 레이블 통일, 오탈자</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 06 시작 순서 -->
+  <section>
+    <div class="section-label">06</div>
+    <h2>이 순서로 시작한다</h2>
+
+    <p>한꺼번에 다 갖추려 하지 않는다. 첫 달은 구조보다 문화를 만드는 게 먼저다.</p>
+
+    <div class="roadmap">
+      <div class="roadmap-col">
+        <div class="roadmap-month">1개월차</div>
+        <div class="roadmap-focus">발견하고 쌓는다</div>
+        <ul class="roadmap-items">
+          <li>감사 테이블 만들고 기입 시작</li>
+          <li>크리틱 세션 첫 시도</li>
+          <li>아직은 판단보다 발견</li>
+          <li>디자인 세션 루틴 정착</li>
+        </ul>
+      </div>
+      <div class="roadmap-col">
+        <div class="roadmap-month">2~3개월차</div>
+        <div class="roadmap-focus">패턴을 찾는다</div>
+        <ul class="roadmap-items">
+          <li>테이블에서 반복 이슈 추출</li>
+          <li>방향성 얼라인 첫 시도</li>
+          <li>High 이슈 스프린트 반영</li>
+          <li>데이터로 팀에 공유</li>
+        </ul>
+      </div>
+      <div class="roadmap-col">
+        <div class="roadmap-month">3개월차 이후</div>
+        <div class="roadmap-focus">원칙화한다</div>
+        <ul class="roadmap-items">
+          <li>UX 원칙 초안 제안</li>
+          <li>결정 로그 누적 관리</li>
+          <li>월말 성과 공유 정례화</li>
+          <li>두 활동 완전 정착</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>샐러드랩 · AlphaApps Design</span>
+    <span>v2.0 · 2026. 04. 22 · 디자인 리드</span>
+  </footer>
+
+</div>
+</body>
+</html>
