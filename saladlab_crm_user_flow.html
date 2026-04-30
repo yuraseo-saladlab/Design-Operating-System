@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0f14;
+    --surface: #161a22;
+    --surface2: #1e2330;
+    --border: #2a3040;
+    --text: #e8eaf0;
+    --text-muted: #6b7280;
+    --text-dim: #9ca3af;
+    --accent: #6c63ff;
+    --accent2: #ff6b6b;
+    --accent3: #ffd93d;
+    --accent4: #6bcb77;
+    --accent5: #4d96ff;
+    --review: #a78bfa;
+    --push: #fb923c;
+    --upsell: #34d399;
+    --canvas: #60a5fa;
+    --chat: #f472b6;
+    --ads: #fbbf24;
+  }
+
+  body {
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* TABS */
+  .tabs-wrapper {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13,15,20,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab {
+    padding: 14px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    letter-spacing: -0.01em;
+  }
+  .tab:hover { color: var(--text-dim); }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* PANELS */
+  .panel { display: none; padding: 32px 24px 80px; max-width: 1200px; margin: 0 auto; }
+  .panel.active { display: block; }
+
+  /* SECTION TITLES */
+  .section-title {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+  .section-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+
+  /* SQUAD LEGEND */
+  .squad-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 36px;
+  }
+  .squad-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    border: 1px solid;
+    letter-spacing: 0.02em;
+  }
+  .dot { width: 7px; height: 7px; border-radius: 50%; }
+
+  /* TIMELINE FLOW */
+  .timeline {
+    position: relative;
+    padding-left: 28px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 16px;
+    bottom: 16px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent), var(--border));
+  }
+
+  .tl-stage {
+    position: relative;
+    margin-bottom: 28px;
+  }
+  .tl-stage::before {
+    content: '';
+    position: absolute;
+    left: -22px;
+    top: 14px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px rgba(108,99,255,0.2);
+    z-index: 1;
+  }
+
+  .stage-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    cursor: pointer;
+  }
+  .stage-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+  .stage-name {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .stage-body {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    overflow: hidden;
+  }
+
+  .stage-desc {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    margin-bottom: 14px;
+  }
+
+  .squad-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .squad-tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 10px;
+    border: 1px solid;
+    letter-spacing: 0.03em;
+  }
+
+  .pain-points {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+  .pain-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .pain-item {
+    font-size: 11px;
+    color: var(--text-dim);
+    padding: 4px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+  }
+  .pain-item::before {
+    content: '→';
+    color: var(--accent2);
+    font-size: 10px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* TARGET CARDS */
+  .target-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .target-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: default;
+  }
+  .target-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .target-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .target-card.t1::before { background: linear-gradient(90deg, var(--review), var(--canvas)); }
+  .target-card.t2::before { background: linear-gradient(90deg, var(--upsell), var(--ads)); }
+  .target-card.t3::before { background: linear-gradient(90deg, var(--push), var(--chat)); }
+  .target-card.t4::before { background: linear-gradient(90deg, var(--ads), var(--accent2)); }
+
+  .target-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .target-name {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .target-desc {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .target-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .meta-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 11px;
+  }
+  .meta-key {
+    color: var(--text-muted);
+    min-width: 60px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .meta-val { color: var(--text-dim); line-height: 1.5; }
+
+  .priority-squads {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 14px;
+  }
+
+  /* MATRIX TABLE */
+  .matrix-wrap {
+    overflow-x: auto;
+    margin-bottom: 40px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    min-width: 700px;
+  }
+  thead tr {
+    background: var(--surface2);
+  }
+  th {
+    padding: 12px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(42,48,64,0.5);
+    vertical-align: top;
+    line-height: 1.5;
+    color: var(--text-dim);
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(108,99,255,0.04); }
+
+  .cell-strong { font-weight: 600; color: var(--text); font-size: 12px; }
+
+  .chip {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 8px;
+    margin: 2px 2px 2px 0;
+  }
+  .chip-high { background: rgba(108,99,255,0.2); color: var(--review); }
+  .chip-mid  { background: rgba(251,146,60,0.15); color: var(--push); }
+  .chip-low  { background: rgba(107,203,119,0.15); color: var(--upsell); }
+
+  /* SCREEN PROPOSAL */
+  .screen-proposals {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .screen-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .screen-section-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .screen-target-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 8px;
+    letter-spacing: 0.04em;
+  }
+  .screen-section-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .screen-section-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-left: auto;
+  }
+
+  .screen-content {
+    padding: 24px;
+  }
+
+  /* MOCKUP WIREFRAME */
+  .mockup {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .mockup-bar {
+    background: var(--surface2);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .mockup-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  .mockup-body {
+    display: flex;
+    min-height: 280px;
+  }
+
+  .mockup-sidebar {
+    width: 60px;
+    background: var(--surface2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 0;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+
+  .mockup-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+  .mockup-icon.active {
+    background: var(--accent);
+  }
+  .mockup-icon.inactive {
+    background: rgba(42,48,64,0.8);
+  }
+
+  .mockup-main {
+    flex: 1;
+    padding: 20px;
+    overflow: hidden;
+  }
+
+  .mockup-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .mockup-title {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .mockup-subtitle {
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+
+  .mockup-btn {
+    font-size: 9px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 6px;
+    background: var(--accent);
+    color: white;
+  }
+
+  .mockup-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .mockup-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+  }
+  .mockup-card-label {
+    font-size: 9px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .mockup-card-val {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .mockup-card-change {
+    font-size: 9px;
+    margin-top: 2px;
+  }
+  .up { color: var(--upsell); }
+  .down { color: var(--accent2); }
+
+  .mockup-banner {
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .mockup-banner-text { font-size: 10px; font-weight: 600; }
+  .mockup-banner-cta {
+    font-size: 9px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.15);
+    color: white;
+  }
+
+  .mockup-section-label {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .mockup-flow-steps {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .mockup-step {
+    font-size: 9px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    background: var(--surface2);
+  }
+  .mockup-step.done { border-color: var(--upsell); color: var(--upsell); }
+  .mockup-step.now { border-color: var(--accent); color: var(--accent); background: rgba(108,99,255,0.1); }
+  .mockup-arrow { color: var(--text-muted); font-size: 10px; }
+
+  /* PROPOSAL NOTES */
+  .proposal-notes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .note-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .note-icon { font-size: 18px; margin-bottom: 6px; }
+  .note-title { font-size: 12px; font-weight: 700; margin-bottom: 6px; }
+  .note-body { font-size: 11px; color: var(--text-dim); line-height: 1.6; }
+
+  /* INSIGHT PANEL */
+  .insight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+  .insight-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .insight-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    margin-bottom: 4px;
+  }
+  .insight-label { font-size: 12px; color: var(--text-dim); margin-bottom: 8px; }
+  .insight-note { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(108,99,255,0.1), rgba(255,107,107,0.05));
+    border: 1px solid rgba(108,99,255,0.2);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .highlight-title { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .highlight-body { font-size: 12px; color: var(--text-dim); line-height: 1.7; }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .mockup-cards { grid-template-columns: repeat(2, 1fr); }
+    .target-grid { grid-template-columns: 1fr; }
+    .panel { padding: 20px 16px 80px; }
+  }
+
+  .tag-soho { background: rgba(167,139,250,0.15); color: var(--review); border-color: rgba(167,139,250,0.3); }
+  .tag-mid   { background: rgba(52,211,153,0.12); color: var(--upsell); border-color: rgba(52,211,153,0.3); }
+  .tag-ent   { background: rgba(251,191,36,0.12); color: var(--ads); border-color: rgba(251,191,36,0.3); }
+
+  .squad-review { color: var(--review); border-color: rgba(167,139,250,0.4); background: rgba(167,139,250,0.1); }
+  .squad-push   { color: var(--push);   border-color: rgba(251,146,60,0.4);  background: rgba(251,146,60,0.1); }
+  .squad-upsell { color: var(--upsell); border-color: rgba(52,211,153,0.4);  background: rgba(52,211,153,0.1); }
+  .squad-canvas { color: var(--canvas); border-color: rgba(96,165,250,0.4);  background: rgba(96,165,250,0.1); }
+  .squad-chat   { color: var(--chat);   border-color: rgba(244,114,182,0.4); background: rgba(244,114,182,0.1); }
+  .squad-ads    { color: var(--ads);    border-color: rgba(251,191,36,0.4);  background: rgba(251,191,36,0.1); }
+</style>
+</head>
+<body>
+
+<div class="tabs-wrapper">
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('overview')">① 타겟 분류</div>
+    <div class="tab" onclick="switchTab('flow1')">② 신규 1인 사장님</div>
+    <div class="tab" onclick="switchTab('flow2')">③ 솔루션 이전 사장님</div>
+    <div class="tab" onclick="switchTab('flow3')">④ 첫 솔루션 도입</div>
+    <div class="tab" onclick="switchTab('flow4')">⑤ 추가 타겟</div>
+    <div class="tab" onclick="switchTab('matrix')">⑥ 스쿼드 × 타겟 매트릭스</div>
+    <div class="tab" onclick="switchTab('screen')">⑦ 화면 구성 제안</div>
+  </div>
+</div>
+
+<!-- ===== TAB 1: OVERVIEW ===== -->
+<div class="panel active" id="panel-overview">
+  <div class="section-title">타겟 분류 & 스쿼드 적용 원칙</div>
+  <div class="section-sub">카페24 기반 커머스 사장님을 성장 단계별로 구분하고, 각 스쿼드의 1차 타겟과 장기 타겟을 정리합니다.</div>
+
+  <div class="squad-legend">
+    <div class="squad-badge squad-review"><div class="dot" style="background:var(--review)"></div>리뷰</div>
+    <div class="squad-badge squad-push"><div class="dot" style="background:var(--push)"></div>푸시</div>
+    <div class="squad-badge squad-upsell"><div class="dot" style="background:var(--upsell)"></div>업셀</div>
+    <div class="squad-badge squad-canvas"><div class="dot" style="background:var(--canvas)"></div>캔버스</div>
+    <div class="squad-badge squad-chat"><div class="dot" style="background:var(--chat)"></div>채팅</div>
+    <div class="squad-badge squad-ads"><div class="dot" style="background:var(--ads)"></div>애즈</div>
+  </div>
+
+  <div class="target-grid">
+    <div class="target-card t1">
+      <div class="target-num">TARGET 01</div>
+      <div class="target-name">🌱 신규 1인 사장님</div>
+      <div class="target-desc">의류·식품 쇼핑몰 개설 후 첫 3~6개월. 매출보다 운영 셋업과 첫 고객 확보가 우선과제.</div>
+      <div class="target-meta">
+        <div class="meta-row"><span class="meta-key">월매출</span><span class="meta-val">0 ~ 500만원</span></div>
+        <div class="meta-row"><span class="meta-key">주요고민</span><span class="meta-val">어떻게 시작하지? 뭐가 필요하지?</span></div>
+        <div class="meta-row"><span class="meta-key">기술수준</span><span class="meta-val">낮음 — 클릭 몇 번으로 끝나야 함</span></div>
+        <div class="meta-row"><span class="meta-key">Pain</span><span class="meta-val">리뷰 0개, 앱 없음, 디자인 무지</span></div>
+      </div>
+      <div class="priority-squads">
+        <span class="squad-tag squad-canvas">캔버스 ★★★</span>
+        <span class="squad-tag squad-review">리뷰 ★★☆</span>
+        <span class="squad-tag squad-push">푸시 ★☆☆</span>
+      </div>
+    </div>
+
+    <div class="target-card t2">
+      <div class="target-num">TARGET 02</div>
+      <div class="target-name">🔄 솔루션 이전 사장님</div>
+      <div class="target-desc">기존 솔루션(카카오 리뷰 등)에서 샐러드랩으로 이전. 데이터 연속성과 기능 완성도가 핵심 기준.</div>
+      <div class="target-meta">
+        <div class="meta-row"><span class="meta-key">월매출</span><span class="meta-val">1,000만 ~ 5,000만원</span></div>
+        <div class="meta-row"><span class="meta-key">주요고민</span><span class="meta-val">기존 데이터 날리지 않을까? 이게 더 나을까?</span></div>
+        <div class="meta-row"><span class="meta-key">기술수준</span><span class="meta-val">중간 — 대시보드 읽고 비교 가능</span></div>
+        <div class="meta-row"><span class="meta-key">Pain</span><span class="meta-val">단일 기능 툴의 한계, 연동 파편화</span></div>
+      </div>
+      <div class="priority-squads">
+        <span class="squad-tag squad-upsell">업셀 ★★★</span>
+        <span class="squad-tag squad-ads">애즈 ★★★</span>
+        <span class="squad-tag squad-review">리뷰 ★★☆</span>
+        <span class="squad-tag squad-push">푸시 ★★☆</span>
+      </div>
+    </div>
+
+    <div class="target-card t3">
+      <div class="target-num">TARGET 03</div>
+      <div class="target-name">🚀 첫 솔루션 도입 사장님</div>
+      <div class="target-desc">어느 정도 운영 중이나 여전히 수동 운영. 매출 정체를 느끼며 처음으로 자동화/마케팅 툴을 시도.</div>
+      <div class="target-meta">
+        <div class="meta-row"><span class="meta-key">월매출</span><span class="meta-val">300만 ~ 2,000만원</span></div>
+        <div class="meta-row"><span class="meta-key">주요고민</span><span class="meta-val">뭘 써야 매출이 오르지? 복잡하진 않을까?</span></div>
+        <div class="meta-row"><span class="meta-key">기술수준</span><span class="meta-val">낮음~중간 — 성과가 보여야 납득</span></div>
+        <div class="meta-row"><span class="meta-key">Pain</span><span class="meta-val">재구매율 낮음, 마케팅 방법 몰라</span></div>
+      </div>
+      <div class="priority-squads">
+        <span class="squad-tag squad-push">푸시 ★★★</span>
+        <span class="squad-tag squad-chat">채팅 ★★★</span>
+        <span class="squad-tag squad-upsell">업셀 ★★☆</span>
+      </div>
+    </div>
+
+    <div class="target-card t4">
+      <div class="target-num">TARGET 04+</div>
+      <div class="target-name">⚡ 추가 타겟 (별도 탭 참고)</div>
+      <div class="target-desc">브랜드 규모 성장기, 팀 운영 중간 규모 브랜드, 멀티몰 운영자, 엔터프라이즈까지 단계적 확장.</div>
+      <div class="target-meta">
+        <div class="meta-row"><span class="meta-key">월매출</span><span class="meta-val">5,000만원 ~ 수억</span></div>
+        <div class="meta-row"><span class="meta-key">주요고민</span><span class="meta-val">팀 협업, 자동화 고도화, ROI 증명</span></div>
+        <div class="meta-row"><span class="meta-key">기술수준</span><span class="meta-val">높음 — API, 커스텀 세그먼트 요구</span></div>
+        <div class="meta-row"><span class="meta-key">Pain</span><span class="meta-val">도구 파편화, 데이터 통합 불가</span></div>
+      </div>
+      <div class="priority-squads">
+        <span class="squad-tag squad-ads">애즈 ★★★</span>
+        <span class="squad-tag squad-canvas">캔버스 ★★★</span>
+        <span class="squad-tag squad-chat">채팅 ★★★</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <div class="highlight-title">🎯 스쿼드별 1차 타겟 요약</div>
+    <div class="highlight-body">
+      <b style="color:var(--review)">리뷰</b> — 소호몰부터 중간 규모까지 폭넓게. 첫 리뷰 수집이 생존과 직결됨.<br>
+      <b style="color:var(--push)">푸시</b> — 앱을 설치한 고객이 있는 소호몰 이상. 재구매 자동화 니즈 강함.<br>
+      <b style="color:var(--upsell)">업셀</b> — 월 300만원+ 이상 거래가 발생하는 몰. 객단가 개선 여지 있어야 의미있음.<br>
+      <b style="color:var(--canvas)">캔버스</b> — 신규~중간 규모. 디자인 리소스 없는 1인 운영에서 가장 즉각적 효과.<br>
+      <b style="color:var(--chat)">채팅</b> — CS 볼륨이 생기는 월 500만원+ 규모. AI 자동응답으로 운영 효율화.<br>
+      <b style="color:var(--ads)">애즈</b> — 광고 예산을 집행하는 1,000만원+ 규모. ROI 추적이 핵심 가치.
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB 2: FLOW 1 ===== -->
+<div class="panel" id="panel-flow1">
+  <div class="section-title">🌱 신규 1인 사장님 — 카페24 사용 Flow</div>
+  <div class="section-sub">쇼핑몰을 막 시작한 사장님. "어떻게 생긴 몰을 만들지"부터 "첫 주문이 들어왔다!"까지의 여정.</div>
+
+  <div class="timeline">
+    <div class="tl-stage">
+      <div class="stage-header">
+        <span class="stage-label">STEP 01</span>
+        <span class="stage-name">카페24 회원가입 & 쇼핑몰 개설</span>
+      </div>
+      <div class="stage-body">
+        <div class="stage-desc">도메인 선택, 업종 설정(의류/식품), 기본 테마 선택. 아무것도 없는 빈 몰에서 시작.</div>
+        <div class="squad-tags">
+          <span class="squad-tag squad-canvas">캔버스 → 테마·배너·레이아웃 즉시 적용</span>
+        </div>
+        <div class="pain-points">
+          <div class="pain-title">Pain Points</div>
+          <div class="pain-item">기본 테마가 너무 촌스럽거나 경쟁몰과 똑같아 보임</div>
+          <div class="pain-item">배너 만들 디자인 툴도 모르고 시간도 없음</div>
+          <div class="pain-item">어떤 레이아웃이 잘 팔리는지 기준이 없음</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-stage">
+      <div class="stage-header">
+        <span class="stage-label">STEP 02</span>
+        <span class="stage-name">상품 등록 & 몰 꾸미기</span>
+      </div>
+      <div class="stage-body">
+        <div class="stage-desc">상품 사진·설명 등록, 가격 책정. 이 단계에서 "내 몰이 예뻐 보이는가"가 전환율을 결정함.</div>
+        <div class="squad-tags">
+          <span class="squad-tag squad-canvas">캔버스 → 상품 페이지 레이아웃, 썸네일 스타일</span>
+          <span class="squad-tag squad-review">리뷰 → 리뷰 위젯 세팅 (0개여도 미리 준비)</span>
+        </div>
+        <div class="pain-points">
+          <div class="pain-title">Pain Points</div>
+          <div class="pain-item">리뷰가 하나도 없어 신뢰도 0에서 출발</div>
+          <div class="pain-item">상품 상세페이지 퀄리티가 매출과 직결되는데 만드는 방법 모름</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-stage">
+      <div class="stage-header">
+        <span class="stage-label">STEP 03</span>
+        <span class="stage-name">첫 주문 유입 & SNS 마케팅 시작</span>
+      </div>
+      <div class="stage-body">
+        <div class="stage-desc">인스타그램, 블로그, 지인 공유로 첫 방문자 유입 시도. 전환이 안 일어나는 이유를 모름.</div>
+        <div class="squad-tags">
+          <span class="squad-tag squad-ads">애즈 → 메타/인스타 광고 첫 집행 가이드</span>
+          <span class="squad-tag squad-push">푸시 → 앱 설치 유도 팝업, 첫 가입 환영 메시지</span>
+          <span class="squad-tag squad-upsell">업셀 → 첫 구매 할인 팝업, 탐색 유도 장치</span>
+        </div>
+        <div class="pain-points">
+          <div class="pain-title">Pain Points</div>
+          <div class="pain-item">방문자는 있는데 장바구니 담고 이탈하는 패턴 반복</div>
+          <div class="pain-item">광고비 태워봤는데 어디서 나온 전환인지 모름</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-stage">
+      <div class="stage-header">
+        <span class="stage-label">STEP 04</span>
+        <span class="stage-name">첫 구매 완료 → 리뷰 수집</span>
+      </div>
+      <div class="stage-body">
+        <div class="stage-desc">첫 실구매 발생. 리뷰를 어떻게 모을지 아무 준비가 안 되어 있어 기회를 놓침.</div>
+        <div class="squad-tags">
+          <span class="squad-tag squad-review">리뷰 → 구매 후 자동 리뷰 요청 메시지 발송</span>
+          <span class="squad-tag squad-push">푸시 → 배송 완료 후 앱푸시 리뷰 유도</span>
+        </div>
+        <div class="pain-points">
+          <div class="pain-title">Pain Points</div>
+          <div class="pain-item">구매 후 연락할 수단이 없어 리뷰 수집율 극히 낮음</div>
+          <div class="pain-item">좋은 리뷰가 쌓여야 다음 전환이 되는데 악순환</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-stage">
+      <div class="stage-header">
+        <span class="stage-label">STEP 05</span>
+        <span class="stage-name">재구매 유도 & 고객 CS 대응</span>
+      </div>
+      <div class="stage-body">
+        <div class="stage-desc">소수 단골 고객이 생기기 시작. 문의가 와도 실시간 대응 못하면 신뢰 떨어짐.</div>
+        <div class="squad-tags">
+          <span class="squad-tag squad-chat">채팅 → AI 자동응답으로 24시간 기본 CS</span>
+          <span class="squad-tag squad-push">푸시 → 재구매 타이밍 개인화 푸시 발송</span>
+          <span class="squad-tag squad-upsell">업셀 → 관련 상품 추천, 세트 구성 제안</span>
+        </div>
+        <div class="pain-points">
+          <div class="pain-title">Pain Points</div>
+          <div class="pain-item">밤 11시에 온 문의에 다음날 오전에야 답변 → 이탈</div>
+          <div class="pain-item">재구매 유도할 방법을 몰라서 그냥 기다림</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB 3: FLOW 2 ===== -->
+<div class="panel" id="panel-flow2">
+  <div class="section-title">🔄 솔루션 이전 사장님 — 카페24 사용 Flow</div>
+  <div class="section-sub">기존 리뷰/마케팅 툴이 있었지만 한계를 느끼고 샐러드랩으로 통합 이전. 데이터 연속성과 성능 증명이 핵심.</div>
+
+  <div class="timeline">
+    <div class="tl-stage">
+      <div class="stage-header">
+        <span class="stage-label">STEP 01</span>
+        <span class="stage-name">기존 솔루션 불만 인식 & 샐러드랩 탐색</span>
+      </div>
+      <div class="stage-body">
+        <div class="stage-desc">리뷰 툴 A, 광고 툴 B, 채팅 툴 C... 따로따로 관리하다 지침. 통합 대시보드 니즈 발생.</div>
+        <div class="squad-tags">
+          <span class="squad-tag squad-ads">애즈 → 기존 광고 성과와 샐러드랩 ROI 비교 리포트</span>
+          <span class="squad-tag squad-review">리뷰 → 기존 리뷰 데이터 마이그레이션 지원</span>
+        </div>
+        <div class="pain-points">
+          <div class="pain-title">Pain Points</div>
+          <div class="pain-item">기존 리뷰 수백 개를 날리고 싶지 않음</div>
+          <div class="pain-item">솔루션마다 로그인하고 각각 결제하는 비효율</div>
+          <div class="pain-item">"이게 진짜 우리 매출에 기여했나?" 증명이 안 됨</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-stage">
+      <div class="stage-header">
+        <span class="stage-label">STEP 02</span>
+        <span class="stage-name">샐러드랩 앱 설치 & 기존 데이터 연동</span>
+      </div>
+      <div class="stage-body">
+        <div class="stage-desc">카페24 앱스토어에서 샐러드랩 설치. 기존 카페24 주문·회원 데이터 자동 연동, 리뷰 임포트.</div>
+        <div class="squad-tags">
+          <span class="squad-tag squad-review">리뷰 → 기존 리뷰 임포트, 위젯 교체</span>
+          <span class="squad-tag squad-push">푸시 → 기존 회원에게 재활성화 캠페인</span>
+          <span class="squad-tag squad-upsell">업셀 → 기존 구매 데이터 기반 추천 로직 즉시 작동</span>
+        </div>
+        <div class="pain-points">
+          <div class="pain-title">Pain Points</div>
+          <div class="pain-item">연동 설정이 복잡하면 중간에 포기함</div>
+          <div class="pain-item">기존 고객 세그먼트가 새 툴에서 살아있어야 함</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-stage">
+      <div class="stage-header">
+        <span class="stage-label">STEP 03</span>
+        <span class="stage-name">통합 대시보드에서 전체 성과 모니터링</span>
+      </div>
+      <div class="stage-body">
+        <div class="stage-desc">리뷰 전환율 + 업셀 추가매출 + 광고 ROAS + 채팅 CS 해결율을 한 화면에서 확인.</div>
+        <div class="squad-tags">
+          <span class="squad-tag squad-upsell">업셀 → 객단가 상승 추이 리포트</span>
+          <span class="squad-tag squad-ads">애즈 → 채널별 ROAS 비교</span>
+          <span class="squad-tag squad-review">리뷰 → 월간 리뷰 브리핑, 부정 리뷰 알림</span>
+        </div>
+        <div class="pain-points">
+          <div class="pain-title">Pain Points</div>
+          <div class="pain-item">숫자는 있는데 어디에 집중해야 할지 모름</div>
+          <div class="pain-item">각 솔루션이 서로 연결된 인사이트를 주지 못함</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-stage">
+      <div class="stage-header">
+        <span class="stage-label">STEP 04</span>
+        <span class="stage-name">고도화 캠페인 — 세그먼트 기반 자동화</span>
+      </div>
+      <div class="stage-body">
+        <div class="stage-desc">단골 고객 / 이탈 위험 고객 / 신규 고객별로 다른 메시지와 오퍼를 자동 발송.</div>
+        <div class="squad-tags">
+          <span class="squad-tag squad-push">푸시 → 세그먼트별 개인화 앱푸시·SMS</span>
+          <span class="squad-tag squad-upsell">업셀 → 상위 구매자 전용 번들 오퍼</span>
+          <span class="squad-tag squad-ads">애즈 → 리타겟팅 광고 자동 연동</span>
+          <span class="squad-tag squad-canvas">캔버스 → 세그먼트별 랜딩 배너 교체</span>
+        </div>
+        <div class="pain-points">
+          <div class="pain-title">Pain Points</div>
+          <div class="pain-item">조건 설정이 너무 복잡하면 그냥 전체 발송으로 회귀</div>
+          <div class="pain-item">자동화 결과가 어디서 났는지 추적이 안 됨</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB 4: FLOW 3 ===== -->
+<div class="panel" id="panel-flow3">
+  <div class="section-title">🚀 첫 솔루션 도입 사장님 — 카페24 사용 Flow</div>
+  <div class="section-sub">수동으로만 운영하다 처음으로 마케팅 툴을 써보는 사장님. "이게 정말 효과 있나요?"가 첫 번째 질문.</div>
+
+  <div class="timeline">
+    <div class="tl-stage">
+      <div class="stage-header">
+        <span class="stage-label">STEP 01</span>
+        <span class="stage-name">매출 정체 인식 & 카페24 앱스토어 탐색</span>
+      </div>
+      <div class="stage-body">
+        <div class="stage-desc">같은 업종 경쟁몰은 잘 되는 것 같은데 우리 몰은 제자리. 뭔가를 써야겠다는 생각은 있지만 뭘 써야 할지 모름.</div>
+        <div class="squad-tags">
+          <span class="squad-tag squad-push">푸시 → 카페24 앱스토어 내 노출, 재구매 케이스 강조</span>
+          <span class="squad-tag squad-chat">채팅 → CS 자동화 효율 강조</span>
+        </div>
+        <div class="pain-points">
+          <div class="pain-title">Pain Points</div>
+          <div class="pain-item">앱이 너무 많아서 뭘 써야 할지 모름</div>
+          <div class="pain-item">유료 솔루션 효과를 믿지 못해 무료 체험만 기웃거림</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-stage">
+      <div class="stage-header">
+        <span class="stage-label">STEP 02</span>
+        <span class="stage-name">샐러드랩 설치 & 온보딩 세팅</span>
+      </div>
+      <div class="stage-body">
+        <div class="stage-desc">설치 후 처음 마주치는 빈 대시보드. 뭐부터 해야 할지 모르면 이탈. 온보딩 가이드가 생사를 결정.</div>
+        <div class="squad-tags">
+          <span class="squad-tag squad-review">리뷰 → 리뷰 위젯 먼저 달기 (즉각적인 시각 효과)</span>
+          <span class="squad-tag squad-canvas">캔버스 → 배너 1개 교체로 첫 성공 경험 제공</span>
+          <span class="squad-tag squad-push">푸시 → 재구매 자동화 1개 켜기 퀵셋업</span>
+        </div>
+        <div class="pain-points">
+          <div class="pain-title">Pain Points</div>
+          <div class="pain-item">첫 화면이 복잡하면 그냥 안 씀</div>
+          <div class="pain-item">설정할 게 많아 보이면 나중에 하려다 영원히 미룸</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-stage">
+      <div class="stage-header">
+        <span class="stage-label">STEP 03</span>
+        <span class="stage-name">첫 2주 — 효과를 눈으로 확인</span>
+      </div>
+      <div class="stage-body">
+        <div class="stage-desc">"리뷰 3개 수집됐어요", "푸시로 재구매 2건 발생했어요" 같은 명시적 성과 피드백이 없으면 해지 가능성 높음.</div>
+        <div class="squad-tags">
+          <span class="squad-tag squad-review">리뷰 → 수집된 리뷰 수 & 전환 기여 수치 표시</span>
+          <span class="squad-tag squad-upsell">업셀 → 추가 구매 발생 건수 실시간 피드</span>
+          <span class="squad-tag squad-push">푸시 → 발송된 푸시 → 열람 → 구매 퍼널 시각화</span>
+        </div>
+        <div class="pain-points">
+          <div class="pain-title">Pain Points</div>
+          <div class="pain-item">숫자가 없으면 "이게 맞나?" 의심 → 해지</div>
+          <div class="pain-item">14일 무료 기간 안에 ROI 못 보면 결제 안 함</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-stage">
+      <div class="stage-header">
+        <span class="stage-label">STEP 04</span>
+        <span class="stage-name">기능 확장 — 채팅 & 업셀 추가 도입</span>
+      </div>
+      <div class="stage-body">
+        <div class="stage-desc">기본 기능에서 성과를 확인한 후, 추가 기능으로 자연스럽게 확장. 강요가 아닌 성과 기반 업셀링.</div>
+        <div class="squad-tags">
+          <span class="squad-tag squad-chat">채팅 → CS 문의량 증가 시점에 자동 제안</span>
+          <span class="squad-tag squad-upsell">업셀 → 객단가 분석 후 "이 상품 세트 추천" 자동화</span>
+          <span class="squad-tag squad-ads">애즈 → 재구매 고객 기반 유사 타겟 광고 제안</span>
+        </div>
+        <div class="pain-points">
+          <div class="pain-title">Pain Points</div>
+          <div class="pain-item">어떤 기능을 추가로 켜야 할지 스스로 판단이 안 됨</div>
+          <div class="pain-item">AI가 "지금 이 기능을 켜면 +20% 예상"이라고 알려줘야 함</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB 5: FLOW 4 (추가 타겟) ===== -->
+<div class="panel" id="panel-flow4">
+  <div class="section-title">⚡ 추가 고려 타겟들</div>
+  <div class="section-sub">기존 3개 타겟 외에 놓치기 쉬운 세그먼트. 장기적으로 엔터프라이즈를 향한 성장 경로.</div>
+
+  <div class="target-grid" style="margin-bottom: 20px;">
+    <div class="target-card t4">
+      <div class="target-num">TARGET 04</div>
+      <div class="target-name">👥 팀으로 성장한 브랜드</div>
+      <div class="target-desc">1인에서 2~5명 팀으로 성장. MD, 마케터, CS 담당자가 각자 다른 기능을 써야 함.</div>
+      <div class="target-meta">
+        <div class="meta-row"><span class="meta-key">월매출</span><span class="meta-val">3,000만 ~ 1억원</span></div>
+        <div class="meta-row"><span class="meta-key">핵심니즈</span><span class="meta-val">팀원별 권한 관리, 협업 워크플로우</span></div>
+        <div class="meta-row"><span class="meta-key">Pain</span><span class="meta-val">공유 계정 쓰다 실수, 팀원 활동 추적 불가</span></div>
+      </div>
+      <div class="priority-squads">
+        <span class="squad-tag squad-canvas">캔버스 ★★★</span>
+        <span class="squad-tag squad-ads">애즈 ★★★</span>
+        <span class="squad-tag squad-chat">채팅 ★★☆</span>
+      </div>
+    </div>
+
+    <div class="target-card t1">
+      <div class="target-num">TARGET 05</div>
+      <div class="target-name">🏪 멀티몰 운영자</div>
+      <div class="target-desc">의류 + 식품 or 국내 + 해외몰 동시 운영. 하나의 대시보드에서 전체 몰을 관리하고 싶음.</div>
+      <div class="target-meta">
+        <div class="meta-row"><span class="meta-key">월매출</span><span class="meta-val">5,000만원+</span></div>
+        <div class="meta-row"><span class="meta-key">핵심니즈</span><span class="meta-val">몰 통합 분석, 리소스 공유</span></div>
+        <div class="meta-row"><span class="meta-key">Pain</span><span class="meta-val">몰마다 솔루션 따로 결제, 데이터 통합 불가</span></div>
+      </div>
+      <div class="priority-squads">
+        <span class="squad-tag squad-upsell">업셀 ★★★</span>
+        <span class="squad-tag squad-push">푸시 ★★★</span>
+        <span class="squad-tag squad-review">리뷰 ★★☆</span>
+      </div>
+    </div>
+
+    <div class="target-card t2">
+      <div class="target-num">TARGET 06</div>
+      <div class="target-name">📦 D2C 전환 브랜드</div>
+      <div class="target-desc">오프라인 or 도매 위주였다가 자사몰 D2C로 피벗. 온라인 마케팅 자체가 처음.</div>
+      <div class="target-meta">
+        <div class="meta-row"><span class="meta-key">월매출</span><span class="meta-val">오프 수억 → 온라인 초기</span></div>
+        <div class="meta-row"><span class="meta-key">핵심니즈</span><span class="meta-val">온라인 고객 데이터 구축, 브랜드 경험 설계</span></div>
+        <div class="meta-row"><span class="meta-key">Pain</span><span class="meta-val">오프라인 노하우가 온라인에서 안 통함</span></div>
+      </div>
+      <div class="priority-squads">
+        <span class="squad-tag squad-canvas">캔버스 ★★★</span>
+        <span class="squad-tag squad-ads">애즈 ★★★</span>
+        <span class="squad-tag squad-chat">채팅 ★★☆</span>
+      </div>
+    </div>
+
+    <div class="target-card t3">
+      <div class="target-num">TARGET 07</div>
+      <div class="target-name">🏢 엔터프라이즈 (장기목표)</div>
+      <div class="target-desc">월 수억 이상 대형 브랜드. 커스텀 연동, SLA, 전담 CS, API 제공이 필수 조건.</div>
+      <div class="target-meta">
+        <div class="meta-row"><span class="meta-key">월매출</span><span class="meta-val">수억원+</span></div>
+        <div class="meta-row"><span class="meta-key">핵심니즈</span><span class="meta-val">커스텀 API, 전담 매니저, SLA 계약</span></div>
+        <div class="meta-row"><span class="meta-key">Pain</span><span class="meta-val">범용 SaaS론 요구사항 충족 불가</span></div>
+      </div>
+      <div class="priority-squads">
+        <span class="squad-tag squad-ads">애즈 ★★★</span>
+        <span class="squad-tag squad-push">푸시 ★★★</span>
+        <span class="squad-tag squad-upsell">업셀 ★★★</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <div class="highlight-title">💡 놓치기 쉬운 진입 시나리오 3가지</div>
+    <div class="highlight-body">
+      <b style="color:var(--accent3)">① 시즌성 집중 몰</b> — 추석·설·발렌타인 등 특정 시즌에만 폭발적 매출. 평소엔 소호몰 수준이지만 시즌엔 엔터프라이즈 수준의 트래픽. 캔버스(시즌 배너 빠른 교체) + 푸시(사전 예약 알림)가 킬러.<br><br>
+      <b style="color:var(--accent3)">② 인플루언서 자사몰</b> — SNS 팔로워 기반으로 쇼핑몰 시작. 이미 팬덤이 있어 첫 주문은 터지지만 재구매 관리를 못 함. 리뷰(팬심 리뷰 수집) + 채팅(팬 소통 채널화)이 차별점.<br><br>
+      <b style="color:var(--accent3)">③ B2B→B2C 확장 식품 제조사</b> — OEM으로 납품하다 자사 브랜드 런칭. 제품력은 있는데 소비자 접점 경험 0. 캔버스(브랜드 아이덴티티 빠른 구축) + 애즈(첫 소비자 캠페인)가 핵심.
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB 6: MATRIX ===== -->
+<div class="panel" id="panel-matrix">
+  <div class="section-title">스쿼드 × 타겟 관여도 매트릭스</div>
+  <div class="section-sub">각 스쿼드가 어떤 타겟에서 가장 큰 가치를 제공하는지, 그리고 카페24 사용 여정의 어느 시점에서 관여하는지 정리.</div>
+
+  <div class="matrix-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>스쿼드</th>
+          <th>1차 타겟</th>
+          <th>관여 시점 (카페24 여정)</th>
+          <th>핵심 가치 제안</th>
+          <th>우선순위</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="squad-tag squad-review" style="font-size:11px; padding:3px 10px; border-radius:8px; border:1px solid;">리뷰</span></td>
+          <td class="cell-strong">소호몰 ~ 중간 규모<br><span style="font-size:11px; color:var(--text-muted)">월 0 ~ 3,000만원</span></td>
+          <td>상품 등록 직후 / 첫 구매 완료 후</td>
+          <td>신뢰 자산 0→1 구축. 리뷰가 없으면 전환이 없음.</td>
+          <td><span class="chip chip-high">소호 ★★★</span><span class="chip chip-mid">중간 ★★☆</span></td>
+        </tr>
+        <tr>
+          <td><span class="squad-tag squad-push" style="font-size:11px; padding:3px 10px; border-radius:8px; border:1px solid;">푸시</span></td>
+          <td class="cell-strong">소호몰 이상<br><span style="font-size:11px; color:var(--text-muted)">앱 설치 고객 발생 시점</span></td>
+          <td>첫 주문 유입 후 / 재구매 유도 단계</td>
+          <td>이탈 방지 + 재구매 자동화. 잠든 고객을 깨움.</td>
+          <td><span class="chip chip-high">소호 ★★☆</span><span class="chip chip-high">중간 ★★★</span></td>
+        </tr>
+        <tr>
+          <td><span class="squad-tag squad-upsell" style="font-size:11px; padding:3px 10px; border-radius:8px; border:1px solid;">업셀</span></td>
+          <td class="cell-strong">중간 규모<br><span style="font-size:11px; color:var(--text-muted)">월 300만원+</span></td>
+          <td>상품 탐색 중 / 장바구니 / 구매 완료 후</td>
+          <td>객단가 상승. 거래 건수보다 건당 금액을 키움.</td>
+          <td><span class="chip chip-low">소호 ★☆☆</span><span class="chip chip-high">중간 ★★★</span></td>
+        </tr>
+        <tr>
+          <td><span class="squad-tag squad-canvas" style="font-size:11px; padding:3px 10px; border-radius:8px; border:1px solid;">캔버스</span></td>
+          <td class="cell-strong">신규 ~ 소호몰<br><span style="font-size:11px; color:var(--text-muted)">몰 개설 직후</span></td>
+          <td>몰 개설 즉시 / 시즌 업데이트 시점</td>
+          <td>디자인 장벽 제거. 1인 운영도 세련된 몰 가능.</td>
+          <td><span class="chip chip-high">신규 ★★★</span><span class="chip chip-mid">소호 ★★☆</span></td>
+        </tr>
+        <tr>
+          <td><span class="squad-tag squad-chat" style="font-size:11px; padding:3px 10px; border-radius:8px; border:1px solid;">채팅</span></td>
+          <td class="cell-strong">소호몰 이상<br><span style="font-size:11px; color:var(--text-muted)">월 500만원+</span></td>
+          <td>CS 문의량 증가 시점 / 야간·주말 운영 필요 시</td>
+          <td>24시간 AI 응대로 운영 효율화. 1인 한계 극복.</td>
+          <td><span class="chip chip-low">신규 ★☆☆</span><span class="chip chip-high">소호+ ★★★</span></td>
+        </tr>
+        <tr>
+          <td><span class="squad-tag squad-ads" style="font-size:11px; padding:3px 10px; border-radius:8px; border:1px solid;">애즈</span></td>
+          <td class="cell-strong">중간 ~ 성장기<br><span style="font-size:11px; color:var(--text-muted)">월 1,000만원+</span></td>
+          <td>첫 광고 집행 시도 / 솔루션 이전 후 ROAS 최적화</td>
+          <td>광고비 낭비 제거. 데이터 기반 타겟팅으로 ROAS 개선.</td>
+          <td><span class="chip chip-low">신규 ★☆☆</span><span class="chip chip-high">중간+ ★★★</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="highlight-box">
+    <div class="highlight-title">🔗 스쿼드 간 시너지 연결 구조</div>
+    <div class="highlight-body">
+      <b style="color:var(--canvas)">캔버스</b> → 몰 완성도 올림 → <b style="color:var(--review)">리뷰</b> 전환율 상승 → <b style="color:var(--upsell)">업셀</b> 노출 효과 증가<br>
+      <b style="color:var(--push)">푸시</b> → 재방문 유도 → <b style="color:var(--upsell)">업셀</b> 추천 노출 → <b style="color:var(--ads)">애즈</b> 리타겟팅 데이터 축적<br>
+      <b style="color:var(--review)">리뷰</b> → 부정 리뷰 감지 → <b style="color:var(--chat)">채팅</b> 자동 CS 연결 → <b style="color:var(--push)">푸시</b> 재구매 회복 캠페인
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB 7: SCREEN PROPOSAL ===== -->
+<div class="panel" id="panel-screen">
+  <div class="section-title">화면 구성 제안</div>
+  <div class="section-sub">타겟별로 첫 진입 화면과 핵심 UX 흐름을 다르게 구성하는 방안. 현재 스크린샷의 구조를 참고하여 개선 방향 제시.</div>
+
+  <div class="screen-proposals">
+
+    <!-- PROPOSAL 1 -->
+    <div class="screen-section">
+      <div class="screen-section-header">
+        <div class="screen-target-badge" style="background:rgba(167,139,250,0.15);color:var(--review)">TARGET 01 · 03</div>
+        <div class="screen-section-title">신규 & 첫 도입 — 온보딩 우선 홈</div>
+        <div class="screen-section-sub">소호몰 · 월 0~1000만원</div>
+      </div>
+      <div class="screen-content">
+        <div class="mockup">
+          <div class="mockup-bar">
+            <div class="mockup-dot" style="background:#ff5f57"></div>
+            <div class="mockup-dot" style="background:#febc2e"></div>
+            <div class="mockup-dot" style="background:#28c840"></div>
+            <span style="font-size:10px; color:var(--text-muted); margin-left:8px">샐러드랩 — 홈</span>
+          </div>
+          <div class="mockup-body">
+            <div class="mockup-sidebar">
+              <div class="mockup-icon active">🏠</div>
+              <div class="mockup-icon inactive">⭐</div>
+              <div class="mockup-icon inactive">📊</div>
+              <div class="mockup-icon inactive">📣</div>
+              <div class="mockup-icon inactive">💬</div>
+              <div class="mockup-icon inactive">🎁</div>
+            </div>
+            <div class="mockup-main">
+              <div class="mockup-topbar">
+                <div>
+                  <div class="mockup-title">안녕하세요, 옥창몰님! 👋</div>
+                  <div class="mockup-subtitle">시작 가이드를 따라 첫 매출을 만들어보세요</div>
+                </div>
+                <div class="mockup-btn">무료 체험 14일</div>
+              </div>
+
+              <!-- 온보딩 스텝 -->
+              <div style="background:rgba(108,99,255,0.08);border:1px solid rgba(108,99,255,0.2);border-radius:8px;padding:12px;margin-bottom:12px;">
+                <div style="font-size:9px;font-weight:700;color:var(--text-muted);margin-bottom:8px;letter-spacing:0.06em">빠른 시작 — 3단계만 하면 바로 효과가 납니다</div>
+                <div class="mockup-flow-steps">
+                  <div class="mockup-step done">✓ 리뷰 위젯 달기</div>
+                  <div class="mockup-arrow">→</div>
+                  <div class="mockup-step now">배너 1개 만들기</div>
+                  <div class="mockup-arrow">→</div>
+                  <div class="mockup-step">재구매 알림 켜기</div>
+                </div>
+              </div>
+
+              <div class="mockup-cards">
+                <div class="mockup-card">
+                  <div class="mockup-card-label">이번 주 리뷰</div>
+                  <div class="mockup-card-val" style="color:var(--review)">3개</div>
+                  <div class="mockup-card-change up">+3 신규 수집</div>
+                </div>
+                <div class="mockup-card">
+                  <div class="mockup-card-label">업셀 추가매출</div>
+                  <div class="mockup-card-val" style="color:var(--upsell)">₩48k</div>
+                  <div class="mockup-card-change up">어제보다 +12%</div>
+                </div>
+                <div class="mockup-card">
+                  <div class="mockup-card-label">미응답 CS</div>
+                  <div class="mockup-card-val" style="color:var(--accent2)">2건</div>
+                  <div class="mockup-card-change down">지금 답변하기 →</div>
+                </div>
+              </div>
+
+              <div class="mockup-banner" style="background:linear-gradient(135deg,rgba(108,99,255,0.3),rgba(244,114,182,0.2))">
+                <div>
+                  <div class="mockup-banner-text">💡 AI 추천: "재구매 푸시 알림을 켜면 +23% 예상"</div>
+                  <div style="font-size:9px;color:rgba(255,255,255,0.5);margin-top:2px">비슷한 의류 쇼핑몰 100개 데이터 기반</div>
+                </div>
+                <div class="mockup-banner-cta">바로 켜기</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="proposal-notes">
+          <div class="note-card">
+            <div class="note-icon">🎯</div>
+            <div class="note-title">온보딩 진행바 상단 고정</div>
+            <div class="note-body">몇 단계 남았는지 시각화. 첫 성공 경험(리뷰 달기)을 가장 쉬운 1단계로 배치.</div>
+          </div>
+          <div class="note-card">
+            <div class="note-icon">📊</div>
+            <div class="note-title">지표는 3개로 압축</div>
+            <div class="note-body">현재 UI처럼 모든 탭을 노출하는 대신, 타겟 수준에 맞는 핵심 지표 3개만 홈에 표시.</div>
+          </div>
+          <div class="note-card">
+            <div class="note-icon">🤖</div>
+            <div class="note-title">AI 추천 배너 1개</div>
+            <div class="note-body">"지금 이 기능을 켜면 +X% 예상" 형태의 액션 가능한 AI 제안. 비슷한 몰 데이터 기반 신뢰도 부여.</div>
+          </div>
+          <div class="note-card">
+            <div class="note-icon">🚫</div>
+            <div class="note-title">현재 문제점 (스크린샷 참고)</div>
+            <div class="note-body">캠페인 카드가 모두 "미사용중"으로 표시 → 공허함. 온보딩 유도 없이 기능 나열만 되어있음.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROPOSAL 2 -->
+    <div class="screen-section">
+      <div class="screen-section-header">
+        <div class="screen-target-badge" style="background:rgba(52,211,153,0.12);color:var(--upsell)">TARGET 02</div>
+        <div class="screen-section-title">솔루션 이전 — 성과 중심 대시보드</div>
+        <div class="screen-section-sub">중간 규모 · 월 1000~5000만원</div>
+      </div>
+      <div class="screen-content">
+        <div class="mockup">
+          <div class="mockup-bar">
+            <div class="mockup-dot" style="background:#ff5f57"></div>
+            <div class="mockup-dot" style="background:#febc2e"></div>
+            <div class="mockup-dot" style="background:#28c840"></div>
+            <span style="font-size:10px; color:var(--text-muted); margin-left:8px">샐러드랩 — 통합 인사이트</span>
+          </div>
+          <div class="mockup-body">
+            <div class="mockup-sidebar">
+              <div class="mockup-icon active">📊</div>
+              <div class="mockup-icon inactive">⭐</div>
+              <div class="mockup-icon inactive">🔴</div>
+              <div class="mockup-icon inactive">📣</div>
+              <div class="mockup-icon inactive">💬</div>
+              <div class="mockup-icon inactive">⚙️</div>
+            </div>
+            <div class="mockup-main">
+              <div class="mockup-topbar">
+                <div>
+                  <div class="mockup-title">이번 달 통합 성과</div>
+                  <div class="mockup-subtitle">2026.3.24 — 4.23 · 전월 대비 비교</div>
+                </div>
+                <div style="display:flex;gap:6px;">
+                  <div class="mockup-btn" style="background:var(--surface2);color:var(--text-dim)">리포트 내보내기</div>
+                  <div class="mockup-btn">+ 캠페인 만들기</div>
+                </div>
+              </div>
+
+              <div class="mockup-cards" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="mockup-card">
+                  <div class="mockup-card-label">샐러드랩 기여 매출</div>
+                  <div class="mockup-card-val" style="color:var(--accent)">₩3.2M</div>
+                  <div class="mockup-card-change up">전월 +34%</div>
+                </div>
+                <div class="mockup-card">
+                  <div class="mockup-card-label">평균 객단가</div>
+                  <div class="mockup-card-val" style="color:var(--upsell)">₩68k</div>
+                  <div class="mockup-card-change up">업셀 효과 +12%</div>
+                </div>
+                <div class="mockup-card">
+                  <div class="mockup-card-label">리뷰 전환 기여</div>
+                  <div class="mockup-card-val" style="color:var(--review)">18%</div>
+                  <div class="mockup-card-change up">+3%p 향상</div>
+                </div>
+                <div class="mockup-card">
+                  <div class="mockup-card-label">광고 ROAS</div>
+                  <div class="mockup-card-val" style="color:var(--ads)">4.2x</div>
+                  <div class="mockup-card-change up">전월 3.1x → 개선</div>
+                </div>
+              </div>
+
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:8px;">
+                <div class="mockup-section-label">스쿼드별 기여 현황</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+                  <div style="font-size:9px;padding:4px 10px;border-radius:6px;background:rgba(167,139,250,0.15);color:var(--review)">리뷰 → 전환 +18%</div>
+                  <div style="font-size:9px;padding:4px 10px;border-radius:6px;background:rgba(251,146,60,0.12);color:var(--push)">푸시 → 재구매 24건</div>
+                  <div style="font-size:9px;padding:4px 10px;border-radius:6px;background:rgba(52,211,153,0.12);color:var(--upsell)">업셀 → +₩480k</div>
+                  <div style="font-size:9px;padding:4px 10px;border-radius:6px;background:rgba(251,191,36,0.12);color:var(--ads)">애즈 → ROAS 4.2x</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="proposal-notes">
+          <div class="note-card">
+            <div class="note-icon">💰</div>
+            <div class="note-title">기여 매출 최상단 배치</div>
+            <div class="note-body">현재 업셀 화면(스크린샷)처럼 "알파업셀에서 발생한 주문 객단가는 0% 더 높아요"가 핵심. 이걸 홈 최상단으로.</div>
+          </div>
+          <div class="note-card">
+            <div class="note-icon">🔗</div>
+            <div class="note-title">스쿼드 간 연결 인사이트</div>
+            <div class="note-body">리뷰 → 업셀 → 광고 → 재구매 연결 고리를 하나의 퍼널로 시각화. 솔루션 이전의 ROI 증명 포인트.</div>
+          </div>
+          <div class="note-card">
+            <div class="note-icon">📤</div>
+            <div class="note-title">리포트 내보내기</div>
+            <div class="note-body">팀원·투자자에게 보여줄 수 있는 리포트 PDF 내보내기. 중간 규모 이상에서 필수 기능.</div>
+          </div>
+          <div class="note-card">
+            <div class="note-icon">⚡</div>
+            <div class="note-title">자동화 세그먼트 제안</div>
+            <div class="note-body">"이 세그먼트에 이 캠페인을 적용하면 X원 예상" AI 제안을 대시보드 하단에 카드형으로 배치.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KEY INSIGHT -->
+    <div class="highlight-box">
+      <div class="highlight-title">🏗️ 현재 구조 → 개선 방향 핵심 3가지</div>
+      <div class="highlight-body">
+        <b style="color:var(--accent3)">① 타겟 감지 기반 홈 개인화</b><br>
+        설치 후 월매출 구간을 입력받거나 카페24 데이터로 자동 감지 → 홈 화면을 타겟별로 다르게 구성. 신규는 온보딩 위주, 중간 규모는 성과 대시보드 위주.<br><br>
+        <b style="color:var(--accent3)">② 사이드바 아이콘을 "브랜드 네임" → "기능 목적"으로 레이블 교체</b><br>
+        현재 "알파리뷰 / 알파업셀 / 알파푸시"는 내부 브랜드명. 사용자에겐 "리뷰 관리 / 매출 올리기 / 알림 보내기"로 재명명하거나, 통합 CRM 관점의 네비게이션 구조로 재편.<br><br>
+        <b style="color:var(--accent3)">③ "미사용중" → "지금 켜면 이런 효과" 로 전환</b><br>
+        현재 모든 캠페인 카드가 "미사용중" 뱃지. 이는 공허함을 강조. 대신 "비슷한 의류몰 평균 +23% 재구매" 같은 예상 효과를 전면에 노출하고, CTA를 "미사용" → "30초 만에 시작하기"로 교체.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function switchTab(id) {
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    const ids = ['overview','flow1','flow2','flow3','flow4','matrix','screen'];
+    t.classList.toggle('active', ids[i] === id);
+  });
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
